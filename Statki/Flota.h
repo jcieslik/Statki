@@ -7,10 +7,6 @@ class fleet
 	int Destroyer_count;
 	int Patrol_Boat_count;
 public:
-	std::vector<Battleship> vector_of_battleships;
-	std::vector<Cruiser> vector_of_cruisers;
-	std::vector<Destroyer> vector_of_destroyers;
-	std::vector<Patrol_Boat> vector_of_Patrol_Boats;
 	fleet(int Battleship_amount, int Cruiser_amount, int Destroyer_amount, int Patrol_Boat_amount)
 	{
 		Battleship_count = Battleship_amount;
@@ -25,7 +21,13 @@ public:
 		Destroyer_count = flota.Destroyer_count;
 		Patrol_Boat_count = flota.Patrol_Boat_count;
 	}
-	fleet();
+	fleet()
+	{
+		Battleship_count = 0;
+	    Cruiser_count = 0;
+		Destroyer_count = 0;
+	    Patrol_Boat_count = 0;
+	}
 	fleet& operator=(const fleet& prawy)
 	{
 		if (&prawy != this)
@@ -36,6 +38,20 @@ public:
 			Patrol_Boat_count = prawy.Patrol_Boat_count;
 		}
 		return *this;
+	}
+	int& operator[](int i)
+	{
+		switch (i)
+		{
+		case 0:
+			return Patrol_Boat_count;
+		case 1:
+			return Destroyer_count;
+		case 2:
+			return Cruiser_count;
+		case 3:
+			return Battleship_count;
+		}
 	}
 	bool check_if_possible(int size)
 	{
@@ -73,19 +89,5 @@ public:
 		if (temp_Battleship == 0 && temp_Cruiser == 0 && temp_Destroyer == 0 && temp_Patrol_Boat == 0)
 			return true;
 		else return false;
-	}
-	void create_fleet()
-	{
-		std::cout << Battleship_count;
-		Battleship nowy{};
-		while (Battleship_count > 0)
-		{
-			vector_of_battleships.push_back(nowy);
-			Battleship_count--;
-		}
-	}
-	std::vector<Battleship> get_Battleship()
-	{
-		return vector_of_battleships;
 	}
 };

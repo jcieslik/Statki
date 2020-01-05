@@ -1,6 +1,8 @@
 #pragma once
+#include "Klasy.h"
 
 enum class state_of_field { Empty = 0, Miss = 1, Taken = 2, Hit = 3};
+enum class Ships {No_ship = 0, Patrol_Boat = 1, Destroyer = 2, Cruiser = 3, Battleship = 4};
 
 class field : public sf::RectangleShape
 {
@@ -63,5 +65,4 @@ public:
 	{
 		return state;
 	}
-
 };
