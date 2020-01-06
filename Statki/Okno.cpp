@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 #include <Windows.h>
-#include "Klasy.h"
+#include "Plansza.h"
 #include "Field.h"
 #include "Funkcje.h"
 #include "Statki.h"
@@ -13,7 +13,7 @@
 using namespace std;
 
 
-fleet poczatek(int size, sf::Font font, sf::RenderWindow& window)
+fleet poczatek(int& size, sf::Font font, sf::RenderWindow& window)
 {
 	Battleship Battleship_model;
 	Cruiser Cruiser_model;
@@ -26,27 +26,28 @@ fleet poczatek(int size, sf::Font font, sf::RenderWindow& window)
 	int Destroyer_amount = 3;
 	int Patrol_Boat_amount = 4;
 
-	sf::Text instrukcja;
-	instrukcja.setFont(font);
-	instrukcja.setString("Ustaw ilosc statkow");
+	sf::Text instruction("Ustaw ilosc statkow", font, 30);
+	sf::Text setting_size("Wielkosc pola:", font, 30);
 
-	sf::Text plus[4];
-	sf::Text minus[4];
-	sf::Text number[4];
+	sf::Text plus[5];
+	sf::Text minus[5];
+	sf::Text number[5];
 	
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 5; i++)
 	{
 		plus[i].setFont(font);
 		plus[i].setString("+");
-		plus[i].setPosition(360, 80 + 60*i);
+		plus[i].setPosition(360,(float) 80 + 60*i);
 		minus[i].setFont(font);
 		minus[i].setString("-");
-		minus[i].setPosition(300, 80 + 60*i);
+		minus[i].setPosition(300, (float)80 + 60*i);
 		number[i].setFont(font);
 		number[i].setString(to_string(4-i));
-		number[i].setPosition(320, 80 + 60*i);
+		number[i].setPosition(320, (float)80 + 60*i);
 	}
-	instrukcja.setPosition(20, 20);
+	number[4].setString(to_string(size));
+	instruction.setPosition(20, 20);
+	setting_size.setPosition(20, 320);
 	Battleship_model.Set_Position(20, 260);
 	Cruiser_model.Set_Position(20, 200);
 	Destroyer_model.Set_Position(20, 140);
@@ -63,7 +64,7 @@ fleet poczatek(int size, sf::Font font, sf::RenderWindow& window)
 		    else if (event.type == event.MouseButtonReleased)
 			{
 				localPosition = sf::Mouse::getPosition(window);
-				change_amount(localPosition, Patrol_Boat_amount, Cruiser_amount, Destroyer_amount, Battleship_amount, number);
+				change_amount(localPosition, Patrol_Boat_amount, Cruiser_amount, Destroyer_amount, Battleship_amount, number, size);
 			}
 			if (event.type == sf::Event::KeyReleased)
 			{
@@ -77,12 +78,13 @@ fleet poczatek(int size, sf::Font font, sf::RenderWindow& window)
 			}
 		}
 		window.clear();
-		window.draw(instrukcja);
+		window.draw(instruction);
+		window.draw(setting_size);
 		Battleship_model.draw_ship(window);
 		Cruiser_model.draw_ship(window);
 		Destroyer_model.draw_ship(window);
 		Patrol_Boat_model.draw_ship(window);
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < 5; i++)
 		{
 			window.draw(plus[i]);
 			window.draw(minus[i]);
@@ -110,7 +112,6 @@ void place_fleet(sf::RenderWindow& window, fleet& flota, int size, gameboard& po
 				window.close();
 			if (event.type == sf::Event::KeyPressed)
 			{
-				int which;
 				if (event.key.code == sf::Keyboard::Num1)
 				{
 					if (flota[0] > 0)
@@ -209,9 +210,7 @@ void place_fleet(sf::RenderWindow& window, fleet& flota, int size, gameboard& po
 					}
 				}
 				if (event.key.code == sf::Keyboard::Enter)
-				{
 					return;
-				}
 			}
 		}
 		window.clear();
@@ -305,7 +304,7 @@ int game(sf::RenderWindow& window, gameboard& enemy_board)
 	}
 }
 
-void change_amount(sf::Vector2i localPosition, int &Patrol_Boat_amount, int &Cruiser_amount, int &Destroyer_amount, int & Battleship_amount, sf::Text number[])
+void change_amount(sf::Vector2i localPosition, int &Patrol_Boat_amount, int &Cruiser_amount, int &Destroyer_amount, int & Battleship_amount, sf::Text number[], int& size)
 {
 	if (localPosition.x > 360 && localPosition.x < 380 && localPosition.y>80 && localPosition.y < 120 && Patrol_Boat_amount < 99)
 	{
@@ -346,5 +345,15 @@ void change_amount(sf::Vector2i localPosition, int &Patrol_Boat_amount, int &Cru
 	{
 		Battleship_amount--;
 		number[3].setString(to_string(Battleship_amount));
+	}
+	if (localPosition.x > 360 && localPosition.x < 380 && localPosition.y>320 && localPosition.y < 360 && size < 20)
+	{
+		size++;
+		number[4].setString(to_string(size));
+	}
+	if (localPosition.x > 300 && localPosition.x < 320 && localPosition.y>320 && localPosition.y < 360 && size > 8)
+	{
+		size--;
+		number[4].setString(to_string(size));
 	}
 }

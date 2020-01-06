@@ -5,16 +5,18 @@ class computer
 {
 protected:
 	fleet enemy_fleet;
+	int size;
 public:
 	fleet get_fleet()
 	{
 		return enemy_fleet;
 	}
-	computer(fleet flota)
+	computer(fleet flota, int wielkosc)
 	{
 		enemy_fleet = flota;
+		size = wielkosc;
 	}
-	void place_enemy_fleet(gameboard& pole, int size)
+	void place_enemy_fleet(gameboard& pole)
 	{
 		Battleship Battleship_model;
 		Cruiser Cruiser_model;
@@ -99,16 +101,16 @@ public:
 			}
 		}
 	}
-	virtual int enemy_turn(sf::RenderWindow& window, int size, gameboard& player_board) = 0;
+	virtual int enemy_turn(sf::RenderWindow& window, gameboard& player_board) = 0;
 };
 
 class easy : public computer
 {
 public:
-	easy(fleet flota)
-		: computer(flota)
+	easy(fleet flota, int wielkosc)
+		: computer(flota, wielkosc)
 	{ }
-	int enemy_turn(sf::RenderWindow& window, int size, gameboard& player_board)
+	int enemy_turn(sf::RenderWindow& window, gameboard& player_board)
 	{
 		int x = rand() % size + 1;
 		int y = rand() % size + 1;
@@ -158,10 +160,10 @@ public:
 class normal : public computer
 {
 public:
-	normal(fleet flota)
-		: computer(flota)
+	normal(fleet flota, int wielkosc)
+		: computer(flota, wielkosc)
 	{ }
-	int enemy_turn(sf::RenderWindow& window, int size, gameboard& player_board)
+	int enemy_turn(sf::RenderWindow& window, gameboard& player_board)
 	{
 
 	}
@@ -170,10 +172,10 @@ public:
 class hard : public computer
 {
 public:
-	hard(fleet flota)
-		: computer(flota)
+	hard(fleet flota, int wielkosc)
+		: computer(flota, wielkosc)
 	{ }
-	int enemy_turn(sf::RenderWindow& window, int size, gameboard& player_board)
+	int enemy_turn(sf::RenderWindow& window, gameboard& player_board)
 	{
 
 	}

@@ -3,8 +3,9 @@
 #include <vector>
 #include <cstdlib>
 #include <random>
+#include <Vld.h>
 #include <Windows.h>
-#include "Klasy.h"
+#include "Plansza.h"
 #include "Field.h"
 #include "Funkcje.h"
 #include "Statki.h"
@@ -17,11 +18,8 @@ using namespace std;
 
 int main()
 {
-	srand(time(NULL));
-	int size;
-	cin >> size;
-	gameboard player_board(size);
-	gameboard enemy_board(size);
+	srand(time(0));
+	int size = 10;
 	sf::Font font;
 	if (!font.loadFromFile("coolvetica rg.ttf"))
 	{
@@ -29,10 +27,12 @@ int main()
 	}
 	sf::RenderWindow window;
 	fleet flota = poczatek(size, font, window);
+	gameboard player_board(size);
+	gameboard enemy_board(size);
 	computer* opponent;
-	easy przeciwnik(flota);
+	easy przeciwnik(flota, size);
 	opponent = &przeciwnik;
-	przeciwnik.place_enemy_fleet(enemy_board, size);
+	przeciwnik.place_enemy_fleet(enemy_board);
 	window.create(sf::VideoMode(40 * (size + 2), 40 * (size + 2)), "Statki", sf::Style::Close);
 	place_fleet(window, flota, size, player_board, font);
 	while (true)
@@ -46,9 +46,8 @@ int main()
 			cout << "BRAWO";
 			break;
 		}
-		if(opponent->enemy_turn(window, size, player_board) == 1)
+		if(opponent->enemy_turn(window, player_board) == 1)
 			break;
 	}
-	Sleep(1000);
 	return 0;
 }
